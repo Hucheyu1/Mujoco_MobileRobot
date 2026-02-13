@@ -45,9 +45,13 @@
 uv run test_a_star.py
 ```
 
-![构建的栅格地图](media/grid_map.png)
-![规划路径](media/grid_map.png)
-![结果展示](media/videos/A_Star_MPC.mp4)
+| ![原始栅格地图](media/grid_map.png) | ![A*规划路径叠加结果](media/grid_map_with_path.png) |
+|-------------------------------------|------------------------------------------------------|  
+
+*左：原始栅格地图 | 右：A*规划路径（红色）与起点/终点（绿色/蓝色）*  
+
+**演示视频**  
+[![A*规划与MPC跟踪演示]](media/videos/A_Star_MPC.mp4)  
 
 ### 2. 其他示例
 
