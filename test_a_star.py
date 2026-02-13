@@ -3,6 +3,7 @@ An example showing how to use RRT-Connect to plan a path and visualize it in muj
 """
 
 # from m0.planning.rrt_connect import RRTConnect
+import os
 import time
 
 import mujoco
@@ -24,7 +25,6 @@ if __name__ == "__main__":
     mjv = MujocoViewer(model, data)
     # build 2D gridmap from mujoco model
     grid_map = GridMap(model=model, data=data, resolution=0.05, width=10.0, height=10.0, robot_radius=0.15, margin=0.1)
-    grid_map.show_map_real()
     # plan a path using A-star
     start = [-4.0, 2.0]
     goal = [4.0, 0]
@@ -33,6 +33,20 @@ if __name__ == "__main__":
     path = interpolate_path(path, num_points=1000)
     print("Planned path:", path)  # (1000, 3)
 
+    filename = os.path.join("media", "grid_map.png")
+    grid_map.show_map_real(filename=filename)
+    filename = os.path.join("media", "grid_map_with_path.png")
+    grid_map.show_map_real(path=path, filename=filename)
+    # 开始录制
+    # 设置输出路径
+    output_dir = "media/videos"
+    os.makedirs(output_dir, exist_ok=True)
+    video_filename = os.path.join(output_dir, "A_Star_MPC.mp4")
+    mjv.start_recording(output_path=video_filename, framerate=30)
+    # 添加帧率控制变量
+    frame_count = 0
+    last_capture_time = time.time()
+    capture_interval = 1.0 / 30  # 30 FPS对应的时间间隔
     # visualize the path in mujoco
     start_xyz = np.array([start[0], start[1], 0.03])
     goal_xyz = np.array([goal[0], goal[1], 0.03])
@@ -46,7 +60,7 @@ if __name__ == "__main__":
     start_theta = path[0][2]
     robot.set_state(np.array([start_x, start_y, 0.03]), start_theta)
     mujoco.mj_forward(model, data)
-    mjv.render()
+    mjv.render(capture_frame=True)
 
     x0 = robot.get_state()
     u0 = robot.get_ctrl()
@@ -62,6 +76,7 @@ if __name__ == "__main__":
     y_refN = np.zeros((5,))  # x, y, theta, v, w
     path_len = len(path)
     while mjv.is_running():
+        current_time = time.time()
         # --- A. 构建参考轨迹 (Reference Generation) ---
         # 关键修改：处理 path 索引越界问题
         # 检查是否到达终点附近
@@ -99,7 +114,7 @@ if __name__ == "__main__":
         v = np.clip(v, -robot.max_v, robot.max_v)
         w = np.clip(w, -robot.max_w, robot.max_w)
         # 记录调试信息
-        print(f"Step: {step}, Pos: {x0[:2]}, Ctrl: {v:.2f}, {w:.2f}")
+        # print(f"Step: {step}, Pos: {x0[:2]}, Ctrl: {v:.2f}, {w:.2f}")
         # --- C. 执行控制 ---
         for _ in range(k_step):
             robot.set_ctrl(v, w)
@@ -114,7 +129,17 @@ if __name__ == "__main__":
         if step < path_len - 1:
             step += 1
         # 显示
-        mjv.render()
+        # --- E. 渲染和录制 ---
+        # 控制录制频率，避免过度录制
+        if current_time - last_capture_time >= capture_interval:
+            mjv.render(capture_frame=True)
+            last_capture_time = current_time
+            frame_count += 1
         time.sleep(0.01)
         # 打印调试信息
         # print(f"Step: {step}/{path_len}, Pos: {x0[:2]}")
+    # 停止录制并保存视频
+    print(f"仿真完成，共录制 {frame_count} 帧")
+    mjv.stop_recording()
+    print(f"视频已保存到: {video_filename}")
+    print("程序结束")

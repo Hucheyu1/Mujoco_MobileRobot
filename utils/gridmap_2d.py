@@ -169,7 +169,7 @@ class GridMap:
         plt.title("2D Grid Map with Obstacles")
         plt.show()
 
-    def show_map_real(self, path=None):
+    def show_map_real(self, path=None, filename="grid_map.png"):
         """
         使用 Matplotlib 显示地图
         :param path: 可选，[(x1,y1), (x2,y2), ...] 路径点列表
@@ -194,6 +194,7 @@ class GridMap:
         plt.xlabel("X [m]")
         plt.ylabel("Y [m]")
         plt.grid(which="both", color="gray", linestyle=":", linewidth=0.5)
+        plt.savefig(filename, dpi=300)
         plt.show()
 
     def draw_path(self, model, data, path, radius=0.01, color=[1, 0, 0]):

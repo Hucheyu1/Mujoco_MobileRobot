@@ -45,6 +45,10 @@
 uv run test_a_star.py
 ```
 
+![构建的栅格地图](media/grid_map.png)
+![规划路径](media/grid_map.png)
+![结果展示](media/videos/A_Star_MPC.mp4)
+
 ### 2. 其他示例
 
 你可以探索项目根目录下的其他测试脚本：

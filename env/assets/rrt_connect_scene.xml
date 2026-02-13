@@ -1,6 +1,11 @@
 <mujoco>
   <compiler autolimits="true"/>
 
+  <visual>
+    <global offheight="720" offwidth="1280"/>
+    <quality offsamples="8"/>
+  </visual>
+
   <asset>
     <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
     <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
@@ -88,6 +93,12 @@
   <!-- L 形转角（两块窄墙） -->
   <geom name="ob_L_1" type="box" pos="2.8 0.0 0.2"  size="0.06 1.0 0.2" rgba=".7 .4 .9 1"/>
   <geom name="ob_L_2" type="box" pos="3.6 -1.0 0.2" size="0.9 0.06 0.2" rgba=".7 .4 .9 1"/>
+
+  <!-- 添加多个相机定义 -->
+  <camera name="top_down" mode="fixed" pos="0 0 10" xyaxes="1 0 0 0 1 0"/>
+  <camera name="angled_top" mode="fixed" pos="8 0 6" xyaxes="0 -1 0 0 0 1"/>
+  <camera name="side" mode="fixed" pos="0 8 0" xyaxes="1 0 0 0 0 1"/>
+  <camera name="follow" mode="trackcom" pos="0 0 5" xyaxes="1 0 0 0 1 0"/>
 
 </worldbody>
 
