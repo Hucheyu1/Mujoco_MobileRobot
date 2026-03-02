@@ -57,7 +57,7 @@ if __name__ == "__main__":
     mjv.draw_traj(
         np.column_stack((global_path[:, 0], global_path[:, 1], np.zeros(len(global_path)) + 0.05)),
         size=0.02,
-        rgba=[0, 0, 1, 1],
+        rgba=np.array([0, 0, 1, 1]),
     )
 
     # 4. 初始化 DWA
