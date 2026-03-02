@@ -87,7 +87,10 @@ class MujocoViewer:
         # self.frames = []
 
     def modify_scene(self):
-        for pt, size, rgba in self.persistent_points:
+        for i, (pt, size, rgba) in enumerate(self.persistent_points):
+            # 采样逻辑：每10个点取一个点（索引0, 10, 20...）
+            if i % 10 != 0 and i != 1:  # 跳过非采样点
+                continue
             if self.renderer.scene.ngeom >= self.max_scene_geoms:
                 print(
                     f"[MujocoViewer]: Exceeded max_scene_geoms={self.max_scene_geoms}, cannot add more persistent points."
