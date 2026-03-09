@@ -57,7 +57,10 @@ uv run test_a_star.py
 
 你可以探索项目根目录下的其他测试脚本：
 
-- `test_rrt.py`: RRT 路径规划+ MPC跟踪。
+- `test_rrt.py`: RRT 路径规划+ MPC跟踪
 ![RRT*规划与MPC跟踪演示](media/videos/RRT_Star_MPC.gif)  
-- `test_dwa.py`: 动态窗口法 (DWA) 路径规划+ MPC跟踪。
-- `test_mpc.py`: 单独的 MPC 跟踪测试。
+- `test_mpc.py`: 单独的 MPC 跟踪测试
+![MPC跟踪演示](media/videos/mpc.gif)  
+- `test_rl.py`: PPO模型测试
+![RL演示](media/videos/rl.gif)  
+- `test_dwa.py`: 动态窗口法 (DWA) 路径规划+ MPC跟踪
